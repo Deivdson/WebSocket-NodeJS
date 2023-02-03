@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+ 
+<html lang="en">
+ 
+<head>
+ 
+    <meta charset="UTF-8">
+ 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <title>WebSocker Client</title>
+    <link rel="stylesheet" href="style.css">
+ 
+</head>
+ 
+<body style="display: flex;">
+    <section class="section">
+        <div class="box" id="perguntas">
+
+        </div>
+        <form class="form" id="form-perguntas">
+            <label for="perg">Insira uma pergunta: </label> <br />
+            <input type="text" name="perg"><br />
+            <labe for="resp">Insira a resposta: </labe><br />
+            <input type="text" name="resp"> <br />
+
+            <input type="submit" value="Enviar" onclick="EnviarPergunta()">
+        </form>
+    </section>
+    
+    <section class="section">
+        <button type="button" class="collapsible">Ver respostas</button>
+        <div class="box content" id="respostas">
+
+        </div>
+        <form class="form" id="form-reponder">
+            <label for="perg">Insira o ID da pergunta: </label> <br />
+            <input type="text" name="id" id="id"><br />
+            <labe for="resp">Insira a resposta: </labe><br />
+            <input type="text" name="resp" id="resposta"> <br />
+
+            <input type="submit" value="Enviar" onclick="EnviarResposta()">
+        </form>
+    </section>
+    <!-- <button onclick="EnviarPergunta()">Click Here</button> -->
+ 
+</body>
+ 
+<script>
+
+
+var lista_perguntas = []
+ 
+    const socket = new WebSocket('ws://localhost:3000');
+ 
+socket.addEventListener('open', function (event) {
+ 
+    socket.send('Connection Established');
+ 
+});
+ 
+ 
+ 
+socket.addEventListener('message', function (event) {
+    event.preventDefault()
+    const msg = (String(JSON.parse(event.data)).split('-'));
+    console.log(`Mensagem retornada do server: ${msg.length}`);
+
+    let i = 0;
+    for(let obj in msg){
+        console.log(obj);
+        lista_perguntas.push(msg[i]);
+        i+=1;
+    }
+    console.log(lista_perguntas);
+    console.log(lista_perguntas[1]);
+    if(msg[0] != '' || msg[0]!=' '){
+        let cont = 0 
+        let perguntas = document.getElementById("perguntas");
+        let respostas = document.getElementById("respostas");
+        for(let obj in lista_perguntas){
+            if(lista_perguntas[cont] === ''){
+                break;
+            }
+            let nova_pergunta = document.createElement('div');                 
+            let nova_resp = document.createElement('div');                 
+        
+            nova_pergunta.innerHTML = `ID: ${cont} Pergunta: ${lista_perguntas[cont]}.`;
+            nova_resp.innerHTML = `ID: ${cont+1} Pergunta: ${lista_perguntas[cont+1]}.`;
+            perguntas.appendChild(nova_pergunta);
+            respostas.appendChild(nova_resp);
+        
+            cont+=2;
+        }
+    }
+ 
+});
+ 
+const EnviarPergunta = () => {
+    console.log("Enviando pergunta...")
+    var pergunta = document.getElementById("form-perguntas").elements["perg"].value;
+    var resposta = document.getElementById("form-perguntas").elements["resp"].value;
+    // msg: tipo pergunta resposta `pergunta ${pergunta} ${resposta}`
+    var objetoJSON = {tipo: "pergunta", perg: pergunta, resp: resposta}
+    // socket.send(JSON.stringify(objetoJSON));
+    socket.send(`pergunta-${pergunta}-${resposta}`);
+    console.log("Enviada!");
+}
+const EnviarResposta = () => {
+    console.log("Enviando resposta...");
+
+    var id = document.getElementById("id").value;
+    var resposta = document.getElementById("resposta").value;
+    id = parseInt(id)+1
+    console.log(id, resposta);
+
+    if(lista_perguntas[id] == resposta){
+        alert("Acertou")
+    }else{
+        alert("Eroou! *voz do Faustão*")
+    }
+    console.log("Enviada")
+
+    console.log("Enviada!");
+}
+ 
+ // --------------------------------------
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+    content.style.display = "none";
+    } else {
+    content.style.display = "block";
+    }
+});
+}
+</script>
+ 
+</html>

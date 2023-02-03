@@ -1,0 +1,42 @@
+.box{
+    background-color: rgb(52, 52, 52);
+    width: 20rem;
+    height: 10rem;
+    
+    border-radius: 10px;
+    color: aliceblue;
+    padding: 10px;
+}
+
+.section{
+    margin: 5rem;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.form{
+    margin: 2rem;
+}
+
+.collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+  }
+  
+  .active, .collapsible:hover {
+    background-color: rgb(52, 52, 52);
+  }
+  
+  .content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: rgb(52, 52, 52);
+  }
