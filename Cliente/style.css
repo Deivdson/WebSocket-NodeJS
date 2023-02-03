@@ -1,3 +1,6 @@
+body{
+  background-image: url("https://th.bing.com/th/id/OIP.0axbr0Twunw1rU3pTpEY5wHaE6?pid=ImgDet&rs=1");
+} 
 .box{
     overflow: scroll;
     background-color: rgb(52, 52, 52);
@@ -5,14 +8,16 @@
     height: 10rem;
     
     border-radius: 10px;
-    color: aliceblue;
+    color: rgb(230, 230, 230);
     padding: 10px;
+    border-radius: 10px;
 }
 
 .section{
     margin: 5rem;
     border-radius: 10px;
     padding: 10px;
+    background-color: rgb(199, 199, 199);
 }
 
 .form{
